@@ -169,3 +169,26 @@ function setLive(url) {
 }
 
 window.setLive = setLive;
+
+/* === VeilCore :: Glitch micro-pulses ============================== */
+(function(){
+  const root = document.documentElement;
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) return;
+
+  // Randomly pulse .glitch elements (8–14s jitter)
+  const bumps = () => {
+    document.querySelectorAll('.glitch').forEach(el=>{
+      el.classList.add('animate');
+      setTimeout(()=> el.classList.remove('animate'), 400);
+    });
+    const next = 8000 + Math.random()*6000;
+    setTimeout(bumps, next);
+  };
+  setTimeout(bumps, 3000);
+
+  // Add hover “acid” to links/buttons without changing markup
+  document.querySelectorAll('a, .btn, .btn-ghost').forEach(el=>{
+    el.classList.add('acid');
+  });
+})();

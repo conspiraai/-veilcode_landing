@@ -1,265 +1,107 @@
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const LIVE_URL = typeof LIVE_URL !== 'undefined' ? LIVE_URL : 'https://pump.fun/';
+const CONTRACT_ADDR = typeof CONTRACT_ADDR !== 'undefined' ? CONTRACT_ADDR : 'TBA';
 
-const initSmoothScroll = () => {
-  const scrollTargets = document.querySelectorAll('a[href^="#"], [data-scroll]');
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const toast = document.getElementById('toast');
+let glitchTimer;
 
-  scrollTargets.forEach((trigger) => {
-    trigger.addEventListener('click', (event) => {
-      const selector = trigger.dataset.scroll || trigger.getAttribute('href');
-      if (!selector || selector === '#' || selector.length <= 1) return;
+function showToast(message, timeout = 1400) {
+  if (!toast) return;
+  toast.textContent = message;
+  toast.hidden = false;
+  window.clearTimeout(showToast._hideTimer);
+  showToast._hideTimer = window.setTimeout(() => {
+    toast.hidden = true;
+  }, timeout);
+}
 
-      const target = document.querySelector(selector);
-      if (!target) return;
-
-      event.preventDefault();
-
-      const scrollOptions = {
-        behavior: prefersReducedMotion.matches ? 'auto' : 'smooth',
-        block: 'start',
-      };
-
-      target.scrollIntoView(scrollOptions);
-      target.setAttribute('tabindex', '-1');
-      target.focus({ preventScroll: true });
-      target.addEventListener(
-        'blur',
-        () => {
-          if (target.getAttribute('tabindex') === '-1') {
-            target.removeAttribute('tabindex');
-          }
-        },
-        { once: true }
-      );
-    });
-  });
-};
-
-const initMobileNav = () => {
-  const toggle = document.querySelector('.mobile-nav-toggle');
-  const nav = document.getElementById('primary-nav');
-
-  if (!toggle || !nav) return;
-
-  const closeNav = () => {
-    nav.dataset.open = 'false';
-    toggle.setAttribute('aria-expanded', 'false');
-  };
-
-  toggle.addEventListener('click', () => {
-    const isOpen = nav.dataset.open === 'true';
-    nav.dataset.open = String(!isOpen);
-    toggle.setAttribute('aria-expanded', String(!isOpen));
-  });
-
-  nav.addEventListener('click', (event) => {
-    if (event.target instanceof Element && event.target.closest('a')) {
-      closeNav();
+async function copyToClipboard(text) {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'absolute';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      textarea.remove();
     }
-  });
+    showToast('Copied to clipboard');
+  } catch (error) {
+    console.error('Copy failed', error);
+    showToast('Copy failed');
+  }
+}
 
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 768) {
-      closeNav();
+document.addEventListener('click', (event) => {
+  const copyTrigger = event.target.closest('[data-copy]');
+  if (copyTrigger) {
+    event.preventDefault();
+    const value = copyTrigger.getAttribute('data-copy');
+    if (value) {
+      copyToClipboard(value);
     }
-  });
-};
-
-const initCopyTicker = () => {
-  const TICKER_VALUE = '$stimothy';
-  const copyButtons = document.querySelectorAll('[data-copy="$stimothy"]');
-  const toast = document.querySelector('.toast');
-
-  if (!copyButtons.length) return;
-
-  const showToast = (message) => {
-    if (!toast) return;
-
-    toast.textContent = message;
-    toast.hidden = false;
-
-    window.clearTimeout(showToast.timeoutId);
-    showToast.timeoutId = window.setTimeout(() => {
-      toast.hidden = true;
-    }, 1400);
-  };
-
-  copyButtons.forEach((btn) => {
-    btn.addEventListener('click', async () => {
-      if (!navigator.clipboard) {
-        showToast('Copy not available');
-        return;
-      }
-
-      try {
-        await navigator.clipboard.writeText(TICKER_VALUE);
-        showToast('Copied $stimothy');
-      } catch (error) {
-        console.error('Clipboard copy failed', error);
-        showToast('Copy not available');
-      }
-    });
-  });
-};
-
-let EMBED_URL = '';
-let liveSectionPrimed = false;
-let embedLoaded = false;
-
-const initLive = () => {
-  if (embedLoaded || !EMBED_URL) return;
-
-  const placeholder = document.getElementById('live-embed') || document.querySelector('[data-live-target]');
-  if (!placeholder) return;
-
-  const iframe = document.createElement('iframe');
-  iframe.src = EMBED_URL;
-  iframe.title = 'Live stream';
-  iframe.loading = 'lazy';
-  iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
-  iframe.setAttribute('allowfullscreen', '');
-  iframe.className = placeholder.className;
-  if (placeholder.id) {
-    iframe.id = placeholder.id;
-  }
-
-  placeholder.replaceWith(iframe);
-  embedLoaded = true;
-
-  const liveNote = document.querySelector('.live__note');
-  if (liveNote) {
-    liveNote.textContent = 'Streaming live now.';
-    liveNote.classList.add('is-live');
-  }
-};
-
-const observeLiveSection = () => {
-  const liveSection = document.getElementById('live');
-  if (!liveSection) return;
-
-  const primeAndInit = () => {
-    liveSectionPrimed = true;
-    initLive();
-  };
-
-  if (typeof IntersectionObserver === 'undefined') {
-    primeAndInit();
     return;
   }
 
-  const observer = new IntersectionObserver(
-    (entries, entryObserver) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-
-        entryObserver.disconnect();
-        primeAndInit();
-      });
-    },
-    {
-      threshold: 0.2,
-      rootMargin: '0px 0px -15% 0px',
-    }
-  );
-
-  observer.observe(liveSection);
-};
-
-const glitchTimers = new WeakMap();
-
-const clearGlitchTimers = (element) => {
-  const timers = glitchTimers.get(element);
-  if (!timers) return;
-
-  if (timers.delay) {
-    window.clearTimeout(timers.delay);
-  }
-  if (timers.cleanup) {
-    window.clearTimeout(timers.cleanup);
-  }
-
-  glitchTimers.delete(element);
-};
-
-const scheduleGlitchBurst = (element) => {
-  if (prefersReducedMotion.matches) return;
-
-  const delay = 8000 + Math.random() * 6000;
-  const delayTimeout = window.setTimeout(() => {
-    element.classList.add('animate');
-
-    const cleanupTimeout = window.setTimeout(() => {
-      element.classList.remove('animate');
-      clearGlitchTimers(element);
-      scheduleGlitchBurst(element);
-    }, 260);
-
-    glitchTimers.set(element, { delay: null, cleanup: cleanupTimeout });
-  }, delay);
-
-  glitchTimers.set(element, { delay: delayTimeout, cleanup: null });
-};
-
-const initGlitchBursts = () => {
-  if (prefersReducedMotion.matches) return;
-
-  const glitchElements = document.querySelectorAll('.glitch');
-  glitchElements.forEach((element) => {
-    clearGlitchTimers(element);
-    scheduleGlitchBurst(element);
-  });
-};
-
-const stopGlitchBursts = () => {
-  const glitchElements = document.querySelectorAll('.glitch');
-  glitchElements.forEach((element) => {
-    clearGlitchTimers(element);
-    element.classList.remove('animate');
-  });
-};
-
-const setYear = () => {
-  const yearSlot = document.getElementById('current-year');
-  if (yearSlot) {
-    yearSlot.textContent = new Date().getFullYear();
-  }
-};
-
-const setLive = (url) => {
-  EMBED_URL = typeof url === 'string' ? url : '';
-  const badge = document.getElementById('live-badge');
-  if (badge) {
-    badge.removeAttribute('hidden');
-  }
-
-  if (liveSectionPrimed) {
-    initLive();
-  }
-};
-
-const handleMotionPreferenceChange = (event) => {
-  if (event.matches) {
-    stopGlitchBursts();
-  } else {
-    initGlitchBursts();
-    if (liveSectionPrimed) {
-      initLive();
+  const anchor = event.target.closest('a[href^="#"]');
+  if (!anchor) return;
+  const href = anchor.getAttribute('href');
+  if (!href || href.length <= 1) return;
+  const target = document.getElementById(href.slice(1));
+  if (!target) return;
+  event.preventDefault();
+  target.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
+  if (typeof target.focus === 'function') {
+    try {
+      target.focus({ preventScroll: true });
+    } catch (error) {
+      target.focus();
     }
   }
-};
-
-if (typeof prefersReducedMotion.addEventListener === 'function') {
-  prefersReducedMotion.addEventListener('change', handleMotionPreferenceChange);
-} else if (typeof prefersReducedMotion.addListener === 'function') {
-  prefersReducedMotion.addListener(handleMotionPreferenceChange);
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-  initSmoothScroll();
-  initCopyTicker();
-  initMobileNav();
-  observeLiveSection();
-  initGlitchBursts();
-  setYear();
 });
 
+function scheduleGlitch() {
+  window.clearTimeout(glitchTimer);
+  if (reduceMotion.matches) return;
+  const elements = document.querySelectorAll('.glitch');
+  if (!elements.length) return;
+  const delay = 8000 + Math.random() * 6000;
+  glitchTimer = window.setTimeout(() => {
+    const random = elements[Math.floor(Math.random() * elements.length)];
+    if (random) {
+      random.classList.add('animate');
+      window.setTimeout(() => random.classList.remove('animate'), 600);
+    }
+    scheduleGlitch();
+  }, delay);
+}
+
+reduceMotion.addEventListener('change', () => {
+  window.clearTimeout(glitchTimer);
+  document.querySelectorAll('.glitch').forEach((el) => el.classList.remove('animate'));
+  scheduleGlitch();
+});
+
+function setLive(url) {
+  const embedUrl = typeof url === 'string' && url.trim() ? url.trim() : LIVE_URL;
+  const container = document.getElementById('live');
+  if (!container) return;
+  if (container.querySelector('iframe')) return;
+  container.innerHTML = `<iframe src="${embedUrl}" title="Pump.fun Live" loading="lazy" allowfullscreen frameborder="0"></iframe>`;
+  const badge = document.getElementById('live-badge');
+  if (badge) {
+    badge.hidden = false;
+  }
+}
+
 window.setLive = setLive;
+
+document.addEventListener('DOMContentLoaded', () => {
+  scheduleGlitch();
+  setLive();
+});

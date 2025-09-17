@@ -1,88 +1,265 @@
-/* =========================================================
-   VeilCore — Stimothy Pumps ($stimothy)
-   Small, dependency-free helpers
-   ========================================================= */
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-const TICKER_VALUE = '$stimothy';
-const LIVE_TARGET   = document.querySelector('[data-live-target]');
-const LIVE_BADGE    = document.getElementById('live-badge');
-const TOAST         = document.getElementById('toast');
+const initSmoothScroll = () => {
+  const scrollTargets = document.querySelectorAll('a[href^="#"], [data-scroll]');
 
-// Smooth-ish scroll and iOS body behavior is left to CSS; keep JS tiny
+  scrollTargets.forEach((trigger) => {
+    trigger.addEventListener('click', (event) => {
+      const selector = trigger.dataset.scroll || trigger.getAttribute('href');
+      if (!selector || selector === '#' || selector.length <= 1) return;
 
-/* ---------- Clipboard: copy $stimothy ---------- */
-const copyButtons = Array.from(document.querySelectorAll('[data-copy]'));
-function showToast(message) {
-  if (!TOAST) return;
-  clearTimeout(showToast.hideTimeoutId);
-  TOAST.textContent = message;
-  TOAST.hidden = false;
-  requestAnimationFrame(() => TOAST.classList.add('is-visible'));
-  showToast.hideTimeoutId = setTimeout(() => {
-    TOAST.classList.remove('is-visible');
-    TOAST.hidden = true;
-  }, 1400);
-}
-copyButtons.forEach(btn => {
-  btn.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(TICKER_VALUE);
-      showToast('Copied $stimothy');
-    } catch {
-      showToast('Copy not available');
+      const target = document.querySelector(selector);
+      if (!target) return;
+
+      event.preventDefault();
+
+      const scrollOptions = {
+        behavior: prefersReducedMotion.matches ? 'auto' : 'smooth',
+        block: 'start',
+      };
+
+      target.scrollIntoView(scrollOptions);
+      target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+      target.addEventListener(
+        'blur',
+        () => {
+          if (target.getAttribute('tabindex') === '-1') {
+            target.removeAttribute('tabindex');
+          }
+        },
+        { once: true }
+      );
+    });
+  });
+};
+
+const initMobileNav = () => {
+  const toggle = document.querySelector('.mobile-nav-toggle');
+  const nav = document.getElementById('primary-nav');
+
+  if (!toggle || !nav) return;
+
+  const closeNav = () => {
+    nav.dataset.open = 'false';
+    toggle.setAttribute('aria-expanded', 'false');
+  };
+
+  toggle.addEventListener('click', () => {
+    const isOpen = nav.dataset.open === 'true';
+    nav.dataset.open = String(!isOpen);
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+  });
+
+  nav.addEventListener('click', (event) => {
+    if (event.target instanceof Element && event.target.closest('a')) {
+      closeNav();
     }
   });
-});
 
-/* ---------- Live embed: lazy swap to iframe ---------- */
-let LIVE_EMBED_URL = null;
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+      closeNav();
+    }
+  });
+};
 
-export function setLive(url){
-  LIVE_EMBED_URL = url;
-  if (LIVE_BADGE) LIVE_BADGE.hidden = false;
-  // If the section is already visible, mount immediately:
-  if (LIVE_TARGET && isInViewport(LIVE_TARGET)) mountLive();
-}
+const initCopyTicker = () => {
+  const TICKER_VALUE = '$stimothy';
+  const copyButtons = document.querySelectorAll('[data-copy="$stimothy"]');
+  const toast = document.querySelector('.toast');
 
-function isInViewport(el){
-  const r = el.getBoundingClientRect();
-  return r.top < window.innerHeight && r.bottom > 0;
-}
+  if (!copyButtons.length) return;
 
-function mountLive(){
-  if (!LIVE_TARGET || !LIVE_EMBED_URL) return;
-  if (LIVE_TARGET.dataset.mounted) return;
+  const showToast = (message) => {
+    if (!toast) return;
+
+    toast.textContent = message;
+    toast.hidden = false;
+
+    window.clearTimeout(showToast.timeoutId);
+    showToast.timeoutId = window.setTimeout(() => {
+      toast.hidden = true;
+    }, 1400);
+  };
+
+  copyButtons.forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      if (!navigator.clipboard) {
+        showToast('Copy not available');
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(TICKER_VALUE);
+        showToast('Copied $stimothy');
+      } catch (error) {
+        console.error('Clipboard copy failed', error);
+        showToast('Copy not available');
+      }
+    });
+  });
+};
+
+let EMBED_URL = '';
+let liveSectionPrimed = false;
+let embedLoaded = false;
+
+const initLive = () => {
+  if (embedLoaded || !EMBED_URL) return;
+
+  const placeholder = document.getElementById('live-embed') || document.querySelector('[data-live-target]');
+  if (!placeholder) return;
 
   const iframe = document.createElement('iframe');
-  iframe.src = LIVE_EMBED_URL;
+  iframe.src = EMBED_URL;
+  iframe.title = 'Live stream';
   iframe.loading = 'lazy';
-  iframe.allow = 'autoplay; clipboard-write; encrypted-media; picture-in-picture';
-  iframe.referrerPolicy = 'no-referrer';
-  iframe.style.width = '100%';
-  iframe.style.height = '56.25vw';         // 16:9 responsive
-  iframe.style.maxHeight = '62vh';
-  iframe.style.minHeight = '320px';
-  iframe.style.border = '0';
-  iframe.setAttribute('title','Live $stimothy stream');
+  iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+  iframe.setAttribute('allowfullscreen', '');
+  iframe.className = placeholder.className;
+  if (placeholder.id) {
+    iframe.id = placeholder.id;
+  }
 
-  LIVE_TARGET.innerHTML = '';
-  LIVE_TARGET.appendChild(iframe);
-  LIVE_TARGET.dataset.mounted = 'true';
+  placeholder.replaceWith(iframe);
+  embedLoaded = true;
+
+  const liveNote = document.querySelector('.live__note');
+  if (liveNote) {
+    liveNote.textContent = 'Streaming live now.';
+    liveNote.classList.add('is-live');
+  }
+};
+
+const observeLiveSection = () => {
+  const liveSection = document.getElementById('live');
+  if (!liveSection) return;
+
+  const primeAndInit = () => {
+    liveSectionPrimed = true;
+    initLive();
+  };
+
+  if (typeof IntersectionObserver === 'undefined') {
+    primeAndInit();
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries, entryObserver) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+
+        entryObserver.disconnect();
+        primeAndInit();
+      });
+    },
+    {
+      threshold: 0.2,
+      rootMargin: '0px 0px -15% 0px',
+    }
+  );
+
+  observer.observe(liveSection);
+};
+
+const glitchTimers = new WeakMap();
+
+const clearGlitchTimers = (element) => {
+  const timers = glitchTimers.get(element);
+  if (!timers) return;
+
+  if (timers.delay) {
+    window.clearTimeout(timers.delay);
+  }
+  if (timers.cleanup) {
+    window.clearTimeout(timers.cleanup);
+  }
+
+  glitchTimers.delete(element);
+};
+
+const scheduleGlitchBurst = (element) => {
+  if (prefersReducedMotion.matches) return;
+
+  const delay = 8000 + Math.random() * 6000;
+  const delayTimeout = window.setTimeout(() => {
+    element.classList.add('animate');
+
+    const cleanupTimeout = window.setTimeout(() => {
+      element.classList.remove('animate');
+      clearGlitchTimers(element);
+      scheduleGlitchBurst(element);
+    }, 260);
+
+    glitchTimers.set(element, { delay: null, cleanup: cleanupTimeout });
+  }, delay);
+
+  glitchTimers.set(element, { delay: delayTimeout, cleanup: null });
+};
+
+const initGlitchBursts = () => {
+  if (prefersReducedMotion.matches) return;
+
+  const glitchElements = document.querySelectorAll('.glitch');
+  glitchElements.forEach((element) => {
+    clearGlitchTimers(element);
+    scheduleGlitchBurst(element);
+  });
+};
+
+const stopGlitchBursts = () => {
+  const glitchElements = document.querySelectorAll('.glitch');
+  glitchElements.forEach((element) => {
+    clearGlitchTimers(element);
+    element.classList.remove('animate');
+  });
+};
+
+const setYear = () => {
+  const yearSlot = document.getElementById('current-year');
+  if (yearSlot) {
+    yearSlot.textContent = new Date().getFullYear();
+  }
+};
+
+const setLive = (url) => {
+  EMBED_URL = typeof url === 'string' ? url : '';
+  const badge = document.getElementById('live-badge');
+  if (badge) {
+    badge.removeAttribute('hidden');
+  }
+
+  if (liveSectionPrimed) {
+    initLive();
+  }
+};
+
+const handleMotionPreferenceChange = (event) => {
+  if (event.matches) {
+    stopGlitchBursts();
+  } else {
+    initGlitchBursts();
+    if (liveSectionPrimed) {
+      initLive();
+    }
+  }
+};
+
+if (typeof prefersReducedMotion.addEventListener === 'function') {
+  prefersReducedMotion.addEventListener('change', handleMotionPreferenceChange);
+} else if (typeof prefersReducedMotion.addListener === 'function') {
+  prefersReducedMotion.addListener(handleMotionPreferenceChange);
 }
 
-const obs = 'IntersectionObserver' in window ? new IntersectionObserver((entries)=>{
-  for (const e of entries){
-    if (e.isIntersecting) mountLive();
-  }
-}, { rootMargin: '120px 0px' }) : null;
+window.addEventListener('DOMContentLoaded', () => {
+  initSmoothScroll();
+  initCopyTicker();
+  initMobileNav();
+  observeLiveSection();
+  initGlitchBursts();
+  setYear();
+});
 
-if (obs && LIVE_TARGET) obs.observe(LIVE_TARGET);
-
-// Fallback: timer check
-setTimeout(() => { if (!LIVE_TARGET?.dataset.mounted) mountLive(); }, 4000);
-
-// Expose setLive globally for inline usage in index.html if desired.
 window.setLive = setLive;
-
-/* ---------- OPTIONAL: set your embed here and forget ---------- */
-// Example: window.setLive('https://player.example.com/embed/your-stream-id');

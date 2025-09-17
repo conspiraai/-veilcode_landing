@@ -17,6 +17,7 @@ Glitchcore single-page site for **VeilCore** promoting the **Stimothy Pumps ($st
 - **VeilCore** is the creator-first collective behind the site and all visual branding.
 - **Stimothy Pumps ($stimothy)** is the featured token; copy throughout the page references the ticker and coin lore.
 - The hero, live badge, and clipboard actions all use `$stimothy` by default—update the copy if the ticker changes.
+- **veilcore.us** is the canonical domain; all deployment steps and meta tags reference the VeilCore home base.
 
 ## Replacing visuals
 
@@ -41,6 +42,7 @@ setLive('YOUR_EMBED_URL');
 
 - Call `setLive` once you know the live embed URL (e.g., Pump.fun stream), either in `script.js` or via an inline script after the page loads (`window.setLive('https://example.com/embed')`).
 - The helper stores the URL, reveals the **NOW LIVE** badge, and swaps the placeholder for an `<iframe>` as soon as the section is visible.
+- `setLive` is exported from `script.js`, so you can import it in other modules or trigger it from the console while testing embeds.
 - Remove or replace the placeholder note below the embed card if the stream should appear immediately on load.
 
 ## Local development

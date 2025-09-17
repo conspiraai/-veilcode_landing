@@ -319,10 +319,21 @@ main {
   position: relative;
   padding-block: clamp(6rem, 12vw, 10rem);
   background:
-    radial-gradient(circle at 20% -10%, rgb(34 225 198 / 0.25), transparent 50%),
-    radial-gradient(circle at 85% 15%, rgb(255 60 172 / 0.2), transparent 55%),
-    linear-gradient(130deg, rgb(0 0 0 / 0.85), rgb(10 10 10 / 0.95));
+    radial-gradient(circle at 12% 10%, rgb(255 255 255 / 0.06), transparent 55%),
+    radial-gradient(circle at 88% 18%, rgb(255 255 255 / 0.04), transparent 60%),
+    linear-gradient(135deg, rgb(4 4 4 / 0.95), rgb(16 16 16 / 0.92));
   overflow: hidden;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(180deg, rgb(0 0 0 / 0) 0 2px, rgb(255 255 255 / 0.05) 3px 3px);
+  mix-blend-mode: soft-light;
+  opacity: 0.12;
+  z-index: 0;
 }
 
 .hero__wrap {
@@ -330,15 +341,30 @@ main {
   gap: clamp(3rem, 6vw, 5rem);
   align-items: center;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  position: relative;
+  z-index: 1;
 }
 
 .hero__content {
   max-width: 48ch;
 }
 
-.hero__copy {
+.hero__content .pill-badge {
+  margin-bottom: clamp(1rem, 3vw, 1.75rem);
+}
+
+.hero__subline {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(1.1rem, 3vw, 1.75rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.hero__tagline {
   color: var(--mute);
   font-size: clamp(1rem, 2.2vw, 1.15rem);
+  max-width: 46ch;
   margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
 }
 
@@ -353,8 +379,8 @@ main {
   position: relative;
   border-radius: var(--radius);
   overflow: hidden;
-  border: var(--border);
-  background: rgb(255 255 255 / 0.05);
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: linear-gradient(145deg, rgb(22 22 22 / 0.9), rgb(6 6 6 / 0.85));
   max-width: 400px;
   justify-self: center;
   box-shadow: 0 25px 60px rgb(0 0 0 / 0.55);

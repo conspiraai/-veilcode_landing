@@ -87,7 +87,7 @@ const initCopyTicker = () => {
 
       try {
         await navigator.clipboard.writeText(value);
-        showToast('Ticker copied!');
+        showToast(`${value} copied!`);
       } catch (error) {
         console.error('Clipboard copy failed', error);
         showToast('Copy not available');

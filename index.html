@@ -2,62 +2,81 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Square Surge ($SQRG) | Veilcode</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VeilCore | Neon Glitch Protocol</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="scanlines"></div>
-  <header class="site-header">
-    <div class="wordmark" aria-label="Veilcode wordmark placeholder"><!-- TODO: Replace with Veilcode SVG wordmark --><span>Veilcode</span></div>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <header class="site-header" role="banner">
+    <div class="wordmark" aria-label="VeilCore wordmark placeholder"><!-- TODO: Replace with VeilCore SVG wordmark --><span>VeilCore</span></div>
     <nav class="site-nav" aria-label="Primary">
-      <a href="#hero">Home</a>
-      <a href="#about">About</a>
-      <a href="#live">Live</a>
-      <a href="#links">Links</a>
+      <ul>
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#live">Live</a></li>
+        <li><a href="#links">Links</a></li>
+      </ul>
     </nav>
   </header>
 
-  <main>
+  <main id="main">
     <section id="hero" class="hero" aria-labelledby="hero-title">
       <div class="hero-content">
-        <p class="eyebrow">Neon markets / Glitched realities</p>
-        <h1 id="hero-title" class="glitch" data-glitch="Square Surge $SQRG">Square Surge <span>$SQRG</span></h1>
-        <p class="hero-copy">Times Square energy meets relentless on-chain acceleration. Square Surge ($SQRG) is your pulse in the neon canyon.</p>
+        <p class="eyebrow">VeilCore.us // Transmission online</p>
+        <h1 id="hero-title" class="glitch animate" data-text="VeilCore Signal">
+          <span class="glitch__line">VeilCore Signal</span>
+          <span class="glitch__line" aria-hidden="true">VeilCore Signal</span>
+          <span class="glitch__line" aria-hidden="true">VeilCore Signal</span>
+        </h1>
+        <p class="hero-copy">
+          Welcome to VeilCore: a neon-laced protocol broadcasting market surges from the heart of glitching Times Square. Tap
+          into the feed, amplify the current, and stay tuned for the next spike.
+        </p>
         <div class="hero-actions">
-          <button class="btn btn-primary" data-scroll="#live">Watch Live</button>
-          <a class="btn btn-ghost" href="https://x.com/veilcode" target="_blank" rel="noreferrer">Follow on X</a>
+          <button class="btn" data-scroll="#live" type="button">Watch Live</button>
+          <a class="btn btn-ghost" href="https://x.com/veilcore" target="_blank" rel="noreferrer">Follow on X</a>
         </div>
-        <div class="ticker-copy">
+        <div class="ticker-copy" role="group" aria-label="Copy VeilCore ticker">
+          <span class="pill-badge" aria-hidden="true">$VCORE</span>
           <span class="ticker-label">Ticker:</span>
-          <span class="ticker-value">$SQRG</span>
-          <button class="copy-btn" type="button" aria-label="Copy ticker" data-copy="$SQRG">Copy</button>
+          <span class="ticker-value" aria-live="polite">$VCORE</span>
+          <button class="copy-btn" type="button" data-copy="$VCORE">Copy ticker</button>
         </div>
       </div>
     </section>
 
     <section id="about" class="about" aria-labelledby="about-title">
       <div class="about-text">
-        <h2 id="about-title">What is Square Surge?</h2>
+        <h2 id="about-title">What is VeilCore?</h2>
         <p>
-          Square Surge is the hyper-glitched pulse of Veilcode's Times Square takeover. We embrace the collision of digital art and on-chain liquidity, letting the crowd fuel the current while neon spectra slice through the dark.
+          VeilCore is the re-imagined command center for on-chain spectacles under the glow of veilcore.us. It fuses glitch art,
+          dark fiber markets, and high-voltage broadcasts into a single amplified signal designed for night-owls and signal
+          seekers.
         </p>
         <p>
-          Every block is a billboard, every trade a burst of color. Join the broadcast, ride the current, and amplify the signal.
+          The protocol thrives on unpredictability: live transmissions, market momentum, and community-coded ritual. Grab the
+          handle, sync to the pulse, and stream the experience when the channel lights green.
         </p>
       </div>
-      <div class="about-visual">
-        <img src="stimothy.png" alt="Square Surge coin placeholder" loading="lazy" />
-      </div>
+      <figure class="about-visual">
+        <img src="stimothy.png" alt="VeilCore coin placeholder" loading="lazy" />
+        <figcaption>Placeholder visual — replace with VeilCore asset.</figcaption>
+      </figure>
     </section>
 
     <section id="live" class="live" aria-labelledby="live-title">
       <div class="live-inner">
         <h2 id="live-title">Live Broadcast</h2>
-        <div class="live-card">
+        <div class="live-card" role="region" aria-label="Live stream placeholder">
           <div class="play-icon" aria-hidden="true"></div>
           <p>Stream appears here when live.</p>
         </div>
@@ -66,34 +85,42 @@
 
     <section id="links" class="links" aria-labelledby="links-title">
       <h2 id="links-title">Links &amp; Signals</h2>
-      <div class="link-grid">
-        <a class="link-card" href="https://pump.fun" target="_blank" rel="noreferrer">
-          <h3>Pump.fun</h3>
-          <p>Track the surge and ignite liquidity where the neon hums.</p>
-        </a>
-        <a class="link-card" href="https://t.me" target="_blank" rel="noreferrer">
-          <h3>Telegram</h3>
-          <p>Drop into the command channel and sync with the swarm.</p>
-        </a>
-        <a class="link-card" href="https://github.com" target="_blank" rel="noreferrer">
-          <h3>GitHub</h3>
-          <p>Inspect the code beams powering the Veilcode transmission.</p>
-        </a>
-      </div>
+      <ul class="link-grid">
+        <li>
+          <a class="link-card" href="https://pump.fun" target="_blank" rel="noreferrer">
+            <h3>Pump.fun</h3>
+            <p>Track the VeilCore liftoff and monitor the liquidity beacon.</p>
+          </a>
+        </li>
+        <li>
+          <a class="link-card" href="https://t.me" target="_blank" rel="noreferrer">
+            <h3>Telegram</h3>
+            <p>Join the operators. Coordinate drops and decode new missions.</p>
+          </a>
+        </li>
+        <li>
+          <a class="link-card" href="https://github.com" target="_blank" rel="noreferrer">
+            <h3>GitHub</h3>
+            <p>Inspect the source and contribute to the VeilCore signal stack.</p>
+          </a>
+        </li>
+      </ul>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <p>Veilcode &copy; <span id="current-year"></span>. All glitches reserved.</p>
+  <footer class="site-footer" role="contentinfo">
+    <p>VeilCore &copy; <span id="current-year"></span>. All signals reserved.</p>
     <nav aria-label="Footer">
-      <a href="#about">About</a>
-      <a href="#live">Live</a>
-      <a href="#links">Links</a>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#live">Live</a></li>
+        <li><a href="#links">Links</a></li>
+      </ul>
     </nav>
   </footer>
 
   <div class="toast" role="status" aria-live="polite" hidden>Ticker copied!</div>
 
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

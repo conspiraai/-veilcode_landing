@@ -1,43 +1,46 @@
-# Square Surge Landing Skeleton
+# VeilCore Landing Page
 
-This repository contains a static landing page scaffold for **Square Surge ($SQRG)** under the Veilcode banner. It uses plain HTML, CSS, and JavaScript to deliver a GlitchCore, neon-soaked Times Square vibe.
+A glitch-forward, neon landing page skeleton for **VeilCore** under [veilcore.us](https://veilcore.us). Built with semantic HTML, modern CSS, and vanilla JavaScript to showcase live transmissions, brand story, and community links.
 
-## Files
+## Project structure
 
-- `index.html` — Page structure with hero, about, live, links, and footer sections.
-- `styles.css` — Theme variables, glitch effects, neon buttons, and responsive layout.
-- `script.js` — Smooth scrolling navigation, ticker copy-to-clipboard, and toast handling.
-- `stimothy.png` — Temporary 1:1 placeholder image reused for hero/coin art.
+```
+├── index.html      # Landing page markup
+├── styles.css      # Glitchcore visual system + responsive layout
+├── script.js       # Smooth scroll & ticker copy interactions
+├── stimothy.png    # Temporary square placeholder image
+└── assets/         # Reserved for future VeilCore imagery and media (currently empty)
+```
 
-## Local Preview
+## Getting started
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/veilcode/veilcode_landing.git
-   cd veilcode_landing
-   ```
-2. Open `index.html` directly in your browser, or serve locally with any static file server:
-   ```bash
-   python3 -m http.server
-   ```
-   Navigate to `http://localhost:8000`.
+1. **Clone** the repository and change into the project directory.
+2. Open `index.html` directly in a browser, or serve the folder locally (for example with `npx serve` or `python -m http.server`).
+3. Customize copy, links, and assets to match the latest VeilCore campaign.
 
-## Customization
+## Customization guide
 
-- **Veilcode Wordmark:** Replace the placeholder text inside the `<div class="wordmark">` element in `index.html` with the official SVG once available.
-- **Ticker:** Update the `data-copy` value on the `.copy-btn` in `index.html` if the ticker changes.
-- **Placeholder Image:** Swap `stimothy.png` with the final Square Surge visual. Keep dimensions square for the best results.
-- **Links:** Edit URLs in the Links section to the official Pump.fun, Telegram, and GitHub destinations.
+- **Brand wordmark**: Replace the TODO comment inside the `.wordmark` container in `index.html` with the official VeilCore SVG.
+- **Ticker symbol**: Update the ticker text and `data-copy` value in the hero ticker group if the symbol changes.
+- **Hero imagery**: Swap gradients or add a background video by editing the `.hero::before` styles in `styles.css`.
+- **Placeholder image**: Replace `stimothy.png` with a final VeilCore coin or glitch asset; store the new asset inside `/assets` and update the `<img>` path in the About section.
+- **Link cards**: Update URLs and copy within the Links section to point to live destinations.
+
+## Accessibility & motion
+
+- Navigation and skip links support keyboard users and smooth scrolling respects `prefers-reduced-motion` settings.
+- Toast announcements use `aria-live="polite"` for assistive technologies.
+- Glitch animations are disabled for reduced-motion preferences.
 
 ## Deploying to GitHub Pages
 
-1. Commit your changes and push to the `main` branch of the public repository.
-2. In GitHub, navigate to **Settings → Pages**.
-3. Under **Source**, choose `Deploy from a branch` and select the `main` branch with the `/ (root)` folder.
-4. Save the settings. GitHub Pages will provision a site, typically available at `https://veilcode.github.io/veilcode_landing/`.
-5. Configure your DNS for `veilcode.us` to point to GitHub Pages:
-   - Create A records for `@` pointing to `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`.
-   - Add a `CNAME` record for `www` pointing to `veilcode.github.io`.
-6. In GitHub Pages settings, add `veilcode.us` as the custom domain and enforce HTTPS.
+1. Push the latest changes to the `main` branch of the public repository.
+2. In GitHub, open **Settings → Pages**.
+3. Under **Build and deployment**, choose **Deploy from a branch**.
+4. Select the `main` branch and the `/ (root)` folder, then save.
+5. After GitHub finishes building, point the custom domain **veilcore.us** to GitHub Pages by updating DNS (add `A` records for `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153` and a `CNAME` to `<username>.github.io`).
+6. Set the custom domain to `veilcore.us` in the Pages configuration so GitHub manages HTTPS.
 
-After DNS propagates, your Square Surge landing site will be live at **https://veilcode.us**.
+## License
+
+Specify licensing information here once the VeilCore team finalizes distribution terms.

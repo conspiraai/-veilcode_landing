@@ -1,62 +1,80 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const headerLinks = document.querySelectorAll('.site-nav a');
-  const heroButtons = document.querySelectorAll('[data-scroll]');
-  const copyButton = document.querySelector('.copy-btn');
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+const initSmoothScroll = () => {
+  const scrollTargets = document.querySelectorAll('a[href^="#"], [data-scroll]');
+
+  scrollTargets.forEach((trigger) => {
+    trigger.addEventListener('click', (event) => {
+      const selector = trigger.dataset.scroll || trigger.getAttribute('href');
+      if (!selector || selector === '#' || selector.length <= 1) return;
+
+      const target = document.querySelector(selector);
+      if (!target) return;
+
+      event.preventDefault();
+
+      const scrollOptions = {
+        behavior: prefersReducedMotion.matches ? 'auto' : 'smooth',
+        block: 'start',
+      };
+
+      target.scrollIntoView(scrollOptions);
+      target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+      target.addEventListener(
+        'blur',
+        () => {
+          if (target.getAttribute('tabindex') === '-1') {
+            target.removeAttribute('tabindex');
+          }
+        },
+        { once: true }
+      );
+    });
+  });
+};
+
+const initCopyTicker = () => {
+  const copyButtons = document.querySelectorAll('[data-copy]');
   const toast = document.querySelector('.toast');
-  const yearSpan = document.getElementById('current-year');
 
-  yearSpan.textContent = new Date().getFullYear();
+  if (!navigator.clipboard || !toast) return;
 
-  const smoothScroll = (target) => {
-    const el = document.querySelector(target);
-    if (!el) return;
-    const offsetTop = el.getBoundingClientRect().top + window.scrollY - 80;
-    window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+  const showToast = (message) => {
+    toast.textContent = message;
+    toast.hidden = false;
+
+    window.clearTimeout(showToast.timeoutId);
+    showToast.timeoutId = window.setTimeout(() => {
+      toast.hidden = true;
+    }, 2200);
   };
 
-  headerLinks.forEach((link) => {
-    link.addEventListener('click', (event) => {
-      const href = link.getAttribute('href');
-      if (href && href.startsWith('#')) {
-        event.preventDefault();
-        smoothScroll(href);
-      }
-    });
-  });
+  copyButtons.forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const value = btn.dataset.copy;
+      if (!value) return;
 
-  heroButtons.forEach((btn) => {
-    btn.addEventListener('click', (event) => {
-      event.preventDefault();
-      const target = btn.getAttribute('data-scroll');
-      if (target) smoothScroll(target);
-    });
-  });
-
-  if (copyButton) {
-    copyButton.addEventListener('click', async () => {
-      const value = copyButton.getAttribute('data-copy');
       try {
         await navigator.clipboard.writeText(value);
         showToast('Ticker copied!');
       } catch (error) {
         console.error('Clipboard copy failed', error);
-        showToast('Copy failed');
+        showToast('Copy not available');
       }
     });
-  }
+  });
+};
 
-  let toastTimeout;
-  function showToast(message) {
-    if (!toast) return;
-    toast.textContent = message;
-    toast.hidden = false;
-    toast.classList.add('show');
-    clearTimeout(toastTimeout);
-    toastTimeout = setTimeout(() => {
-      toast.classList.remove('show');
-      toastTimeout = setTimeout(() => {
-        toast.hidden = true;
-      }, 400);
-    }, 2000);
+const setYear = () => {
+  const yearSlot = document.getElementById('current-year');
+  if (yearSlot) {
+    yearSlot.textContent = new Date().getFullYear();
   }
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  initSmoothScroll();
+  initCopyTicker();
+  setYear();
 });

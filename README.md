@@ -17,7 +17,7 @@ Glitchcore single-page site for **VeilCore** promoting the **Stimothy Pumps ($st
 - **VeilCore** is the creator-first collective behind the site and all visual branding.
 - **Stimothy Pumps ($stimothy)** is the featured token; copy throughout the page references the ticker and coin lore.
 - The hero, live badge, and clipboard actions all use `$stimothy` by default—update the copy if the ticker changes.
-- **veilcore.us** is the canonical domain; all deployment steps and meta tags reference the VeilCore home base.
+- VeilCore.us is the canonical domain; all deployment steps and meta tags reference the VeilCore home base.
 
 ## Replacing visuals
 
@@ -64,6 +64,12 @@ setLive('YOUR_EMBED_URL');
 
 - When you ship updates, append a version query to static assets in `index.html`, e.g. `styles.css?v=2024-05-17`.
 - Alternatively, rename files (`styles.v2.css`, `script.v2.js`) so GitHub Pages serves the latest bundle without relying on stale browser caches.
+
+## Links
+
+- Telegram: https://t.me/stimothypumps
+- X/Twitter community: https://x.com/majorleague_dev/status/1968142661879206385?s=61
+- ConspiraAI: https://conspiraai.com
 
 ## License
 

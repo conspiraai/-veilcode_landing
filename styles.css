@@ -16,7 +16,7 @@
   --wrap-max: 1200px;
   --radius: 16px;
   --border: 1px solid rgb(255 255 255 / 0.08);
-  font-family: 'Archivo Black', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: clamp(15px, 0.9vw + 0.8rem, 18px);
   color-scheme: dark;
 }
@@ -33,7 +33,7 @@ body {
   min-height: 100vh;
   background: var(--bg);
   color: var(--ink);
-  font-family: 'JetBrains Mono', 'Archivo Black', system-ui, sans-serif;
+  font-family: 'Inter', 'Archivo Black', system-ui, sans-serif;
   font-weight: 400;
   line-height: 1.6;
   text-rendering: optimizeLegibility;
@@ -82,7 +82,7 @@ p {
 h1,
 h2,
 h3 {
-  font-family: 'Archivo Black', system-ui, sans-serif;
+  font-family: 'Archivo Black', 'Inter', system-ui, sans-serif;
   font-weight: 700;
   letter-spacing: 0.02em;
   line-height: 1.1;
@@ -590,7 +590,7 @@ body::before {
   display: inline-flex;
   gap: 0.5ch;
   align-items: center;
-  font: 600 0.8rem/1.8 'JetBrains Mono', system-ui, sans-serif;
+  font: 600 0.8rem/1.8 'Inter', system-ui, sans-serif;
   padding: 0.1rem 0.6rem;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 999px;

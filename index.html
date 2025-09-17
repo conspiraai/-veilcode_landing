@@ -27,7 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;600&family=JetBrains+Mono:wght@500&display=swap"
     rel="stylesheet"
   />
   <link rel="stylesheet" href="styles.css" />
@@ -39,20 +39,28 @@
 
   <header class="site-header" role="banner">
     <div class="wrap">
-      <div class="wordmark" aria-label="Veilcode wordmark placeholder">
-        <!-- TODO: Replace with Veilcode SVG wordmark -->
-        <span>Veilcode</span>
+      <div class="wordmark" aria-label="VeilCore wordmark placeholder">
+        <!-- TODO: Replace with assets/veilcore-wordmark.svg -->
+        <span>VeilCore</span>
       </div>
       <nav id="primary-nav" class="site-nav" aria-label="Primary" data-open="false">
         <ul>
-          <li><a href="#hero">Home</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#live">Live</a></li>
+          <li><a href="#token">Token</a></li>
           <li><a href="#links">Links</a></li>
         </ul>
       </nav>
-      <button class="btn btn-ghost mobile-nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
-        Menu
+      <button
+        class="mobile-nav-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="primary-nav"
+        aria-label="Toggle navigation"
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
       </button>
     </div>
   </header>
@@ -120,6 +128,37 @@
       </div>
     </section>
 
+    <section id="token" class="section token" aria-labelledby="token-title">
+      <div class="wrap section__wrap">
+        <div class="section__content">
+          <p class="pill-badge" aria-hidden="true">Token primer</p>
+          <h2 id="token-title">$SQRG signal stats</h2>
+          <p>
+            Square Surge operates on velocity. Replace these placeholders with your live token metrics—liquidity depth,
+            treasury reserves, or the ritual mechanics that keep the glitch humming.
+          </p>
+          <ul class="token-grid" role="list">
+            <li>
+              <span class="token-label">Launch</span>
+              <span class="token-value">TBA</span>
+            </li>
+            <li>
+              <span class="token-label">Supply</span>
+              <span class="token-value">1,000,000</span>
+            </li>
+            <li>
+              <span class="token-label">Liquidity</span>
+              <span class="token-value">Priming</span>
+            </li>
+          </ul>
+        </div>
+        <div class="token__cta">
+          <p>Need contract details? Drop them here once the Square Surge core goes live.</p>
+          <a class="btn btn-ghost" href="https://pump.fun" target="_blank" rel="noreferrer">View on Pump.fun</a>
+        </div>
+      </div>
+    </section>
+
     <section id="links" class="section" aria-labelledby="links-title">
       <div class="wrap">
         <div class="section__header">
@@ -157,6 +196,7 @@
         <ul>
           <li><a href="#about">About</a></li>
           <li><a href="#live">Live</a></li>
+          <li><a href="#token">Token</a></li>
           <li><a href="#links">Links</a></li>
         </ul>
       </nav>

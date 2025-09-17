@@ -26,6 +26,8 @@ semantic HTML, modern CSS, and vanilla JavaScript with accessibility-minded patt
 - **Images**: Swap `stimothy.png` with new square art stored in `/assets`, then update the `<img>` sources in the Hero and About
   sections.
 - **Links**: Replace placeholder URLs in the Links grid with the live Pump.fun, Telegram, GitHub (or other) destinations.
+- **Token stats**: Populate the Token section list items and CTA once contract launch timing, supply, and liquidity figures are
+  confirmed.
 - **Styling**: Adjust variables in `:root` within `styles.css` to shift the palette, or extend the utility classes to add more
 glitch behaviors.
 

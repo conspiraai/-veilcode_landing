@@ -1,218 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <title>$stimothy — Stimothy Pumps</title>
-  <meta name="description" content="$stimothy — glitch-native, dark glitchcore broadcast. Live streams, drops, and on-chain chaos. Built by VeilCore." />
-  <link rel="canonical" href="https://veilcore.us" />
-
-  <!-- Open Graph / Twitter -->
-  <meta property="og:title" content="$stimothy — Stimothy Pumps" />
-  <meta property="og:description" content="$stimothy — glitch-native, dark glitchcore broadcast. Live streams, drops, and on-chain chaos. Built by VeilCore." />
+  <title>VeilCore — Stimothy Pumps ($stimothy)</title>
+  <meta
+    name="description"
+    content="VeilCore presents Stimothy Pumps ($stimothy), a glitchcore broadcast from veilcore.us. Replace this copy with your production summary."
+  />
+  <meta property="og:title" content="VeilCore — Stimothy Pumps ($stimothy)" />
+  <meta
+    property="og:description"
+    content="Glitchcore landing for Stimothy Pumps broadcasting live from veilcore.us. Update with final messaging."
+  />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://veilcore.us" />
-  <meta property="og:image" content="assets/social-card.png" />
+  <meta property="og:url" content="https://veilcore.us/" />
+  <meta property="og:image" content="https://veilcore.us/assets/social-card.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="$stimothy — Stimothy Pumps" />
-  <meta name="twitter:description" content="$stimothy — glitch-native, dark glitchcore broadcast. Live streams, drops, and on-chain chaos. Built by VeilCore." />
-  <meta name="twitter:image" content="assets/social-card.png" />
-
-  <link rel="icon" href="assets/icon.png" type="image/png" />
-  <link rel="stylesheet" href="./styles.css?v=build-2025-09-17T14:35Z" />
+  <meta name="twitter:title" content="VeilCore — Stimothy Pumps ($stimothy)" />
+  <meta
+    name="twitter:description"
+    content="Stimothy Pumps by VeilCore. Update this placeholder with the final hook."
+  />
+  <meta name="twitter:image" content="https://veilcore.us/assets/social-card.png" />
+  <link rel="icon" href="/assets/favicon.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;600&family=JetBrains+Mono:wght@500&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="script.js" defer></script>
 </head>
+<body class="dark">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="scanlines" aria-hidden="true"></div>
 
-<body class="scanlines psy">
-  <a class="skip" href="#main">Skip to content</a>
-
-  <header class="site-header">
-    <div class="wordmark glitch acid" aria-label="$stimothy" data-text="$stimothy">
-      <span class="ink-grad">$stimothy</span>
+  <header class="site-header" role="banner">
+    <div class="wrap">
+      <div class="wordmark" aria-label="VeilCore wordmark placeholder">
+        <!-- TODO: Replace with assets/veilcore-wordmark.svg -->
+        <span>VeilCore</span>
+      </div>
+      <nav id="primary-nav" class="site-nav" aria-label="Primary" data-open="false">
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#live">Live</a></li>
+          <li><a href="#token">Token</a></li>
+          <li><a href="#links">Links</a></li>
+        </ul>
+      </nav>
+      <button
+        class="mobile-nav-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="primary-nav"
+        aria-label="Toggle navigation"
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
     </div>
-    <nav class="site-nav" aria-label="Primary">
-      <a href="#about">About</a>
-      <a href="#live">Live</a>
-      <a href="#token">Token</a>
-      <a href="#roadmap">Roadmap</a>
-      <a href="#links">Links</a>
-    </nav>
   </header>
 
-  <main id="main" class="wrap">
-    <!-- HERO -->
-    <section id="hero" class="hero" aria-labelledby="hero-title">
-      <div class="hero-inner">
-        <div class="hero-copy">
-          <h1 id="hero-title" class="glitch acid" data-text="Stimothy Pumps">
-            <span class="ink-grad">Stimothy Pumps</span>
-          </h1>
-          <p class="hero-sub glitch" data-text="$stimothy">$stimothy</p>
-          <p class="hero-tagline">addicted to pump.fun — watch the chaos live</p>
-          <div class="hero-actions">
+  <main id="main">
+    <section id="hero" class="wrap scanlines hero" aria-labelledby="hero-title">
+      <div class="hero__inner">
+        <div class="hero__left">
+          <h1 id="hero-title" class="glitch" data-text="Stimothy Pumps">Stimothy Pumps</h1>
+          <p class="hero__subline glitch" data-text="$stimothy">$stimothy</p>
+          <p class="hero__tagline">addicted to pump.fun — watch the chaos live</p>
+          <div class="hero__actions">
             <a class="btn" href="#live">Watch Live</a>
             <button class="btn-ghost" type="button" data-copy="$stimothy">Copy $stimothy</button>
             <span class="pill-badge" id="live-badge" hidden>NOW LIVE</span>
           </div>
         </div>
-        <div class="hero-art">
-          <!-- Replace this image with your coin or Stimothy art (1:1 PNG/SVG) -->
-          <img src="stimothy.png" alt="Stimothy holding the pill — $stimothy mascot" width="512" height="512" loading="lazy" />
+        <div class="hero__right">
+          <img src="stimothy.png" alt="Stimothy coin" loading="lazy" />
         </div>
       </div>
     </section>
 
-    <!-- ABOUT -->
     <section id="about" class="section" aria-labelledby="about-title">
-      <h2 id="about-title">About $stimothy</h2>
-      <p>$stimothy is a glitch-native, creator-first project. We design coins, streams, and moments wired into the feed. Our mascot, Stimothy, is addicted to pump.fun—and we build around the spectacle.</p>
-      <p>This hub keeps it simple: live streams, drops, and progress—built in public. No promises, no financial advice. Just raw output and culture.</p>
-      <ul class="bullet-list">
-        <li>Live trading stream</li>
-        <li>Creator rewards focus</li>
-        <li>No commentary, no mercy</li>
-      </ul>
-    </section>
-
-    <!-- LIVE -->
-    <section id="live" class="section" aria-labelledby="live-title">
-      <h2 id="live-title">Live Stream</h2>
-      <div class="live_frame" id="live-embed" data-live-target>
-        <!-- Placeholder card swaps to <iframe> when setLive(url) runs -->
-        <div class="live_placeholder" role="img" aria-label="Live stream placeholder">
-          <span class="live_play" aria-hidden="true">▶</span>
-          <p class="live_note">Stream appears here when live.</p>
+      <div class="wrap section__wrap">
+        <div class="section__content">
+          <h2 id="about-title">What is VeilCore?</h2>
+          <p>VeilCore is a glitch-native, creator-first studio channeling the Stimothy Pumps signal.</p>
+          <p>This hub keeps the live streams, drops, and on-chain chaos in one feed. Nothing here is financial advice.</p>
+          <ul class="section__list">
+            <li>Live trading stream</li>
+            <li>Creator rewards focus</li>
+            <li>No commentary, no mercy</li>
+          </ul>
         </div>
-      </div>
-      <div class="cta-trio">
-        <a class="btn" href="https://pump.fun/" target="_blank" rel="noopener">Open pump.fun</a>
-        <a class="btn-ghost" href="#token">Token details</a>
-        <a class="btn-ghost" href="#roadmap">Roadmap</a>
+        <figure class="section__visual">
+          <img src="stimothy.png" alt="Stimothy coin" loading="lazy" />
+        </figure>
       </div>
     </section>
 
-    <!-- TOKEN -->
-    <section id="token" class="section" aria-labelledby="token-title">
-      <h2 id="token-title">$stimothy</h2>
-
-      <div class="ticker" aria-hidden="true">
-        <div class="ticker__inner">
-          $stimothy • addicted to pump.fun • stay unhinged • $stimothy • addicted to pump.fun • stay unhinged •
+    <section id="live" class="section live" aria-labelledby="live-title">
+      <div class="wrap live__wrap">
+        <h2 id="live-title">Live on pump.fun</h2>
+        <div class="live__frame" data-live-target>
+          <div class="live__placeholder" role="img" aria-label="Live stream placeholder">
+            <span class="live__play" aria-hidden="true"></span>
+          </div>
         </div>
-      </div>
-
-      <div class="token-cards">
-        <article class="card">
-          <h3>Contract</h3>
-          <p>Coming soon</p>
-          <button class="btn-ghost small" data-copy="$stimothy">Copy $stimothy</button>
-        </article>
-        <article class="card">
-          <h3>Liquidity</h3>
-          <p>TBA</p>
-        </article>
-        <article class="card">
-          <h3>Creator rewards</h3>
-          <p>Stream-driven culture; we reward the spectacle. Details soon.</p>
-        </article>
-      </div>
-
-      <div class="token-cta">
-        <a class="btn" href="https://pump.fun/" target="_blank" rel="noopener">Launch / Trade</a>
-        <a class="btn-ghost" href="https://t.me/stimothypumps" target="_blank" rel="noopener">Join Telegram</a>
+        <p class="live__note">Stream appears here when live.</p>
       </div>
     </section>
 
-    <!-- ROADMAP -->
-    <section id="roadmap" class="section" aria-labelledby="roadmap-title">
-      <h2 id="roadmap-title">Roadmap</h2>
-      <ol class="roadmap">
-        <li>
-          <h3>Phase 1 — Signal</h3>
-          <p>Ship the glitchcore hub (this site), kick off the live stream, and seed community in Telegram/X. First drops of Stimothy art packs + meme kit.</p>
-          <ul>
-            <li>Live embed online</li>
-            <li>Telegram raids</li>
-            <li>Meme kit v1</li>
-          </ul>
-        </li>
-        <li>
-          <h3>Phase 2 — Flow</h3>
-          <p>Smart contract live, creator reward loop, and weekly “midnight activations.” Clips and glitch art submitted earn on-chain perks.</p>
-          <ul>
-            <li>Creator reward spec</li>
-            <li>Clips → on-chain bounties</li>
-            <li>Liquidity event window</li>
-          </ul>
-        </li>
-        <li>
-          <h3>Phase 3 — Surge</h3>
-          <p>Expand the broadcast: multi-scene live, pop-up raids, collabs. Community showcases featured on the homepage.</p>
-          <ul>
-            <li>Multi-scene stream</li>
-            <li>Collab drops</li>
-            <li>Homepage community slot</li>
-          </ul>
-        </li>
-      </ol>
-
-      <div class="cta-wide">
-        <a class="btn" href="https://t.me/stimothypumps" target="_blank" rel="noopener">Join the swarm</a>
-        <a class="btn-ghost" href="https://x.com/majorleague_dev/status/1968142661879206385?s=61" target="_blank" rel="noopener">Tap the X feed</a>
+    <section id="token" class="section token" aria-labelledby="token-title">
+      <div class="wrap token__wrap">
+        <h2 id="token-title">$stimothy</h2>
+        <div class="ticker" aria-label="$stimothy ticker">
+          <div class="ticker__inner" aria-hidden="true">
+            $stimothy • addicted to pump.fun • stay unhinged • $stimothy • addicted to pump.fun • stay unhinged •
+          </div>
+        </div>
+        <ul class="token-cards" role="list">
+          <li class="token-card">
+            <h3>Contract</h3>
+            <p>Coming soon</p>
+          </li>
+          <li class="token-card">
+            <h3>Liquidity</h3>
+            <p>Placeholder details</p>
+          </li>
+          <li class="token-card">
+            <h3>Creator rewards</h3>
+            <p>Share how creators tap into $stimothy — clips, raids, and glitch art get first cuts.</p>
+          </li>
+        </ul>
       </div>
     </section>
 
-    <!-- LINKS -->
     <section id="links" class="section" aria-labelledby="links-title">
-      <p class="pill-badge" aria-hidden="true">Quick links</p>
-      <h2 id="links-title">Plug into the grid</h2>
 
-      <ul class="link-grid" role="list">
-        <li>
-          <a class="link-card" href="Pump.Fun/" target="_blank" rel="noopener">
-            <h3>https://pump.fun/profile/stimothy?tab=followers</h3>
-            <p>Home of $stimothy — launch and stream live.</p>
-          </a>
-        </li>
-        <li>
-          <a class="link-card" href="https://x.com/majorleague_dev/status/1968142661879206385?s=61" target="_blank" rel="noopener">
-            <h3>X / Twitter</h3>
-            <p>Tap into the $stimothy signal in real time.</p>
-          </a>
-        </li>
-        <li>
-          <a class="link-card" href="https://t.me/stimothypumps" target="_blank" rel="noopener">
-            <h3>Telegram</h3>
-            <p>Coordinate raids, share intel, and chat with the $stimothy crew.</p>
-          </a>
-        </li>
-        <li>
-          <a class="link-card" href="https://conspiraai.com" target="_blank" rel="noopener">
-            <h3>ConspiraAI</h3>
-            <p>Explore the studio building $stimothy.</p>
-          </a>
-        </li>
-        <li>
-          <a class="link-card" href="https://github.com/conspiraai/-veilcode_landing" target="_blank" rel="noopener">
-            <h3>GitHub</h3>
-            <p>Review the repo and ship fresh glitches.</p>
-          </a>
-        </li>
-      </ul>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <small>© <span id="year"></span> $stimothy • <a href="https://veilcore.us">veilcore.us</a> • built by VeilCore • <a href="https://conspiraai.com" target="_blank" rel="noopener">conspiraai.com</a></small>
+  <footer class="site-footer" role="contentinfo">
+    <div class="wrap footer__wrap">
+      <p class="footer__legal">
+        © VeilCore <span id="current-year"></span>
+        <span aria-hidden="true">•</span>
+        <span class="footer__domain">veilcore.us</span>
+      </p>
+      <nav aria-label="Legal">
+        <ul class="footer__nav">
+          <li><a href="#">Terms</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
   </footer>
 
-  <div class="toast" role="status" aria-live="polite" id="toast" hidden></div>
+  <div class="toast" role="status" aria-live="polite" hidden>$stimothy copied!</div>
 
-  <script src="./script.js?v=build-2025-09-17T14:35Z" defer></script>
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-    // TODO: after you have your live URL, uncomment and set it here or in script.js:
-    // setLive('https://your-live-embed-url');
-  </script>
 </body>
 </html>

@@ -1,73 +1,68 @@
-# $stimothy — Stimothy Pumps ($stimothy)
+# VeilCore Landing — Stimothy Pumps ($stimothy)
 
-$stimothy is a glitch-native, creator-first experience built around the Stimothy Pumps coin. This single-page site leans into a monochrome glitchcore aesthetic, is hosted at [https://VeilCore.us](https://VeilCore.us), and is built by VeilCore for live streams, drops, and on-chain chaos.
+Glitchcore single-page site for **VeilCore** promoting the **Stimothy Pumps ($stimothy)** coin. The page ships as semantic HTML, modern CSS, and vanilla JavaScript with motion-aware glitch effects that power the hero, live embed, and resource sections.
 
-## Overview
-- **Brand:** $stimothy  
-- **Coin:** Stimothy Pumps  
-- **Ticker:** `$stimothy` (used by the copy button)
-- **Canonical domain:** https://VeilCore.us  
-- **Credit:** built by VeilCore
+## Project structure
 
-The stack is intentionally lightweight: semantic HTML, modern CSS, and vanilla JavaScript only. Accessibility features include a skip link, focus-visible outlines, aria-live toast messaging, and reduced-motion preferences for glitch animations.
-
-## Project Structure
 ```
-/
-├── index.html        # Landing layout and content sections
-├── styles.css        # Glitchcore / monochrome design system
-├── script.js         # Smooth scroll, clipboard toast, glitch pulses, live embed helper
-├── assets/
-│   └── social-card.png  # 1200×630 placeholder for social sharing
-├── stimothy.png      # Placeholder coin artwork used in the hero
-└── README.md         # Documentation (this file)
+├── index.html      # Landing page markup and accessible section structure
+├── styles.css      # Glitchcore theme, layout system, neon utilities
+├── script.js       # Smooth scroll, clipboard toast, live embed helpers
+├── stimothy.png    # Temporary 1:1 coin artwork placeholder
+└── assets/         # Reserved for future imagery (kept empty intentionally)
 ```
 
-### Brand & Content Notes
-- The wordmark, headings, and ticker all reference $stimothy and Stimothy Pumps.
-- The hero artwork uses `stimothy.png` as a placeholder; swap it once new art is available.
-- The footer includes the canonical domain reference and “built by VeilCore” credit.
+## Brand & coin context
 
-## Customising Assets
-- **Wordmark:** Replace the text wordmark in `index.html` with your SVG or image, keeping the aria-label as `$stimothy` for screen readers.
-- **Coin artwork:** Swap `stimothy.png` with your own 1:1 artwork (keep the filename or update the `<img>` reference).
-- **Social card:** Update `assets/social-card.png` to match your campaign while maintaining 1200×630 dimensions for optimal sharing previews.
+- **VeilCore** is the creator-first collective behind the site and all visual branding.
+- **Stimothy Pumps ($stimothy)** is the featured token; copy throughout the page references the ticker and coin lore.
+- The hero, live badge, and clipboard actions all use `$stimothy` by default—update the copy if the ticker changes.
 
-## Live Embed Usage
-The site lazily mounts a live iframe when the `setLive` helper receives a URL.
+## Replacing visuals
 
-```html
-<script>
-  setLive('https://your-embed-url.example');
-</script>
+### Wordmark placeholder
+- Locate the `TODO` comment inside the `.wordmark` element in `index.html`.
+- Swap the placeholder text with the final VeilCore SVG or `<img>` tag once the asset is ready.
+- If using an inline SVG, keep the `aria-label` so screen readers still announce "VeilCore".
+
+### Coin artwork
+- The site currently references `stimothy.png` for square art in the hero and about sections.
+- Replace the image by dropping a new 1:1 asset into `/assets` and updating the `<img>` `src` attributes in `index.html`.
+- Provide descriptive `alt` text that matches the new artwork for accessibility.
+
+## Configuring the live embed
+
+The live section defers loading until it enters the viewport. To wire up a stream URL:
+
+```js
+// Inside script.js
+setLive('YOUR_EMBED_URL');
 ```
 
-- When a valid URL is provided, the NOW LIVE badge is revealed and the iframe replaces the placeholder.
-- IntersectionObserver is used to defer loading until the live section scrolls into view, with a timeout fallback if the API is unavailable.
+- Call `setLive` once you know the live embed URL (e.g., Pump.fun stream).
+- The helper stores the URL, reveals the **NOW LIVE** badge, and swaps the placeholder for an `<iframe>` as soon as the section is visible.
+- Remove or replace the placeholder note below the embed card if the stream should appear immediately on load.
 
-## Local Development
-1. Clone the repository and `cd` into it.
-2. Open `index.html` directly in a browser or serve the folder locally (any static server works, e.g. `python -m http.server`).
-3. Edit HTML/CSS/JS files and refresh. No build step is required.
+## Local development
 
-## Deployment to GitHub Pages (VeilCore.us)
-1. Commit and push the latest changes to the `main` branch.
-2. In the GitHub repository, open **Settings → Pages**.
-3. Choose the `main` branch with the `/root` directory and save.
-4. In your DNS provider, configure the VeilCore.us domain:
-   - Set the **A records** to GitHub Pages IPs: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`.
-   - Add a **CNAME** record pointing `www` to `<username>.github.io` (replace with your GitHub username).
-5. Back in GitHub Pages settings, set the **Custom domain** to `VeilCore.us` and enforce HTTPS.
+1. Clone the repository and switch into the project folder.
+2. Open `index.html` directly in a browser or run a lightweight server (`python -m http.server` or `npx serve`).
+3. Edit copy, links, and styles; refresh to preview updates.
 
-## Cache Busting Tips
-- Append version query strings when updating assets (e.g. `styles.css?v=2`).
-- Replace the filename entirely for larger updates (e.g. `social-card-v2.png`) and update references in HTML.
-- For CDN caches, purge after deployment or rely on GitHub Pages’ automatic invalidation when files change.
+## Deploying to GitHub Pages (veilcode.us)
 
-## Links
-- Telegram: https://t.me/stimothypumps
-- X / Twitter community: https://x.com/majorleague_dev/status/1968142661879206385?s=61
-- ConspiraAI: https://conspiraai.com
+1. Commit and push changes to the `main` branch.
+2. In GitHub, navigate to **Settings → Pages**.
+3. Under **Build and deployment**, choose **Deploy from a branch**, then select `main` and the root (`/`) folder.
+4. After the first deploy, set the custom domain to **veilcore.us** in the same Pages settings panel.
+5. Update DNS so `veilcore.us` points to GitHub Pages (A records `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`, plus a `CNAME` to `<username>.github.io`).
+6. Wait for GitHub to issue the TLS certificate; confirm HTTPS works before promoting the link.
+
+### Cache-busting tips
+
+- When you ship updates, append a version query to static assets in `index.html`, e.g. `styles.css?v=2024-05-17`.
+- Alternatively, rename files (`styles.v2.css`, `script.v2.js`) so GitHub Pages serves the latest bundle without relying on stale browser caches.
 
 ## License
-Placeholder — add your preferred license text here.
+
+Document licensing once VeilCore finalizes distribution terms for Stimothy Pumps content.

@@ -1,265 +1,140 @@
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+/* ============================
+   VeilCore — Stimothy Pumps ($stimothy)
+   Client-side interactions
+   - Smooth scroll (reduced-motion aware)
+   - Copy-to-clipboard + toast
+   - Random micro-glitch pulses
+   - Lazy live embed with setLive(url)
+   ============================ */
 
-const initSmoothScroll = () => {
-  const scrollTargets = document.querySelectorAll('a[href^="#"], [data-scroll]');
-
-  scrollTargets.forEach((trigger) => {
-    trigger.addEventListener('click', (event) => {
-      const selector = trigger.dataset.scroll || trigger.getAttribute('href');
-      if (!selector || selector === '#' || selector.length <= 1) return;
-
-      const target = document.querySelector(selector);
-      if (!target) return;
-
-      event.preventDefault();
-
-      const scrollOptions = {
-        behavior: prefersReducedMotion.matches ? 'auto' : 'smooth',
-        block: 'start',
-      };
-
-      target.scrollIntoView(scrollOptions);
-      target.setAttribute('tabindex', '-1');
-      target.focus({ preventScroll: true });
-      target.addEventListener(
-        'blur',
-        () => {
-          if (target.getAttribute('tabindex') === '-1') {
-            target.removeAttribute('tabindex');
-          }
-        },
-        { once: true }
-      );
-    });
+/* -------- Smooth scroll (respect reduced motion) -------- */
+(function () {
+  const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) return;
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const id = a.getAttribute('href').slice(1);
+    if (!id) return;
+    const el = document.getElementById(id);
+    if (!el) return;
+    e.preventDefault();
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    history.replaceState(null, '', `#${id}`);
   });
-};
+})();
 
-const initMobileNav = () => {
-  const toggle = document.querySelector('.mobile-nav-toggle');
-  const nav = document.getElementById('primary-nav');
-
-  if (!toggle || !nav) return;
-
-  const closeNav = () => {
-    nav.dataset.open = 'false';
-    toggle.setAttribute('aria-expanded', 'false');
-  };
-
-  toggle.addEventListener('click', () => {
-    const isOpen = nav.dataset.open === 'true';
-    nav.dataset.open = String(!isOpen);
-    toggle.setAttribute('aria-expanded', String(!isOpen));
-  });
-
-  nav.addEventListener('click', (event) => {
-    if (event.target instanceof Element && event.target.closest('a')) {
-      closeNav();
-    }
-  });
-
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 768) {
-      closeNav();
-    }
-  });
-};
-
-const initCopyTicker = () => {
-  const TICKER_VALUE = '$stimothy';
-  const copyButtons = document.querySelectorAll('[data-copy="$stimothy"]');
-  const toast = document.querySelector('.toast');
-
-  if (!copyButtons.length) return;
-
-  const showToast = (message) => {
-    if (!toast) return;
-
-    toast.textContent = message;
-    toast.hidden = false;
-
-    window.clearTimeout(showToast.timeoutId);
-    showToast.timeoutId = window.setTimeout(() => {
-      toast.hidden = true;
-    }, 1400);
-  };
-
-  copyButtons.forEach((btn) => {
-    btn.addEventListener('click', async () => {
-      if (!navigator.clipboard) {
-        showToast('Copy not available');
-        return;
-      }
-
-      try {
-        await navigator.clipboard.writeText(TICKER_VALUE);
-        showToast('Copied $stimothy');
-      } catch (error) {
-        console.error('Clipboard copy failed', error);
-        showToast('Copy not available');
-      }
-    });
-  });
-};
-
-let EMBED_URL = '';
-let liveSectionPrimed = false;
-let embedLoaded = false;
-
-const initLive = () => {
-  if (embedLoaded || !EMBED_URL) return;
-
-  const placeholder = document.getElementById('live-embed') || document.querySelector('[data-live-target]');
-  if (!placeholder) return;
-
-  const iframe = document.createElement('iframe');
-  iframe.src = EMBED_URL;
-  iframe.title = 'Live stream';
-  iframe.loading = 'lazy';
-  iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
-  iframe.setAttribute('allowfullscreen', '');
-  iframe.className = placeholder.className;
-  if (placeholder.id) {
-    iframe.id = placeholder.id;
+/* -------- Toast helper -------- */
+function showToast(msg) {
+  let t = document.querySelector('.toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.className = 'toast';
+    t.setAttribute('role', 'status');
+    t.setAttribute('aria-live', 'polite');
+    document.body.appendChild(t);
   }
-
-  placeholder.replaceWith(iframe);
-  embedLoaded = true;
-
-  const liveNote = document.querySelector('.live__note');
-  if (liveNote) {
-    liveNote.textContent = 'Streaming live now.';
-    liveNote.classList.add('is-live');
-  }
-};
-
-const observeLiveSection = () => {
-  const liveSection = document.getElementById('live');
-  if (!liveSection) return;
-
-  const primeAndInit = () => {
-    liveSectionPrimed = true;
-    initLive();
-  };
-
-  if (typeof IntersectionObserver === 'undefined') {
-    primeAndInit();
-    return;
-  }
-
-  const observer = new IntersectionObserver(
-    (entries, entryObserver) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-
-        entryObserver.disconnect();
-        primeAndInit();
-      });
-    },
-    {
-      threshold: 0.2,
-      rootMargin: '0px 0px -15% 0px',
-    }
-  );
-
-  observer.observe(liveSection);
-};
-
-const glitchTimers = new WeakMap();
-
-const clearGlitchTimers = (element) => {
-  const timers = glitchTimers.get(element);
-  if (!timers) return;
-
-  if (timers.delay) {
-    window.clearTimeout(timers.delay);
-  }
-  if (timers.cleanup) {
-    window.clearTimeout(timers.cleanup);
-  }
-
-  glitchTimers.delete(element);
-};
-
-const scheduleGlitchBurst = (element) => {
-  if (prefersReducedMotion.matches) return;
-
-  const delay = 8000 + Math.random() * 6000;
-  const delayTimeout = window.setTimeout(() => {
-    element.classList.add('animate');
-
-    const cleanupTimeout = window.setTimeout(() => {
-      element.classList.remove('animate');
-      clearGlitchTimers(element);
-      scheduleGlitchBurst(element);
-    }, 260);
-
-    glitchTimers.set(element, { delay: null, cleanup: cleanupTimeout });
-  }, delay);
-
-  glitchTimers.set(element, { delay: delayTimeout, cleanup: null });
-};
-
-const initGlitchBursts = () => {
-  if (prefersReducedMotion.matches) return;
-
-  const glitchElements = document.querySelectorAll('.glitch');
-  glitchElements.forEach((element) => {
-    clearGlitchTimers(element);
-    scheduleGlitchBurst(element);
-  });
-};
-
-const stopGlitchBursts = () => {
-  const glitchElements = document.querySelectorAll('.glitch');
-  glitchElements.forEach((element) => {
-    clearGlitchTimers(element);
-    element.classList.remove('animate');
-  });
-};
-
-const setYear = () => {
-  const yearSlot = document.getElementById('current-year');
-  if (yearSlot) {
-    yearSlot.textContent = new Date().getFullYear();
-  }
-};
-
-const setLive = (url) => {
-  EMBED_URL = typeof url === 'string' ? url : '';
-  const badge = document.getElementById('live-badge');
-  if (badge) {
-    badge.removeAttribute('hidden');
-  }
-
-  if (liveSectionPrimed) {
-    initLive();
-  }
-};
-
-const handleMotionPreferenceChange = (event) => {
-  if (event.matches) {
-    stopGlitchBursts();
-  } else {
-    initGlitchBursts();
-    if (liveSectionPrimed) {
-      initLive();
-    }
-  }
-};
-
-if (typeof prefersReducedMotion.addEventListener === 'function') {
-  prefersReducedMotion.addEventListener('change', handleMotionPreferenceChange);
-} else if (typeof prefersReducedMotion.addListener === 'function') {
-  prefersReducedMotion.addListener(handleMotionPreferenceChange);
+  t.textContent = msg;
+  t.classList.add('on');
+  window.clearTimeout(showToast._timer);
+  showToast._timer = window.setTimeout(() => t.classList.remove('on'), 1400);
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  initSmoothScroll();
-  initCopyTicker();
-  initMobileNav();
-  observeLiveSection();
-  initGlitchBursts();
-  setYear();
-});
+/* -------- Copy $stimothy button(s) -------- */
+(function () {
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('[data-copy="$stimothy"]');
+    if (!btn) return;
+    try {
+      await navigator.clipboard.writeText('$stimothy');
+      showToast('Copied: $stimothy');
+    } catch {
+      // Fallback: create temp input
+      const tmp = document.createElement('input');
+      tmp.value = '$stimothy';
+      document.body.appendChild(tmp);
+      tmp.select();
+      try { document.execCommand('copy'); showToast('Copied: $stimothy'); }
+      catch { showToast('Copy failed'); }
+      tmp.remove();
+    }
+  });
+})();
 
+/* -------- Random micro-glitch pulses (reduced-motion aware) -------- */
+(function () {
+  const rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (rm) return;
+  const GLITCH_CLASS = 'animate';
+  function pulseOnce() {
+    const els = document.querySelectorAll('.glitch');
+    if (!els.length) return;
+    const el = els[Math.floor(Math.random() * els.length)];
+    el.classList.add(GLITCH_CLASS);
+    setTimeout(() => el.classList.remove(GLITCH_CLASS), 900);
+  }
+  function loop() {
+    const delay = 8000 + Math.random() * 4000; // 8–12s
+    setTimeout(() => { pulseOnce(); loop(); }, delay);
+  }
+  // Start after initial paint
+  window.addEventListener('load', () => setTimeout(loop, 1200));
+})();
+
+/* -------- Live embed (lazy) -------- */
+let EMBED_URL = ''; // set via setLive(url)
+function mountLiveIframe() {
+  if (!EMBED_URL) return;
+  const box = document.getElementById('live-embed');
+  if (!box) return;
+  // Avoid remounting
+  if (box.dataset.mounted === '1') return;
+
+  box.innerHTML = `<iframe
+    src="${EMBED_URL}"
+    loading="lazy"
+    allow="autoplay; fullscreen; picture-in-picture"
+    referrerpolicy="no-referrer"
+    frameborder="0"
+    style="width:100%;aspect-ratio:16/9;border:0;border-radius:12px;box-shadow:0 0 0 1px #ffffff22 inset;"
+  ></iframe>`;
+
+  box.dataset.mounted = '1';
+  const badge = document.getElementById('live-badge');
+  if (badge) badge.removeAttribute('hidden');
+}
+
+(function () {
+  const target = document.getElementById('live-embed');
+  if (!target) return;
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          mountLiveIframe();
+          io.disconnect();
+        }
+      });
+    }, { rootMargin: '200px' });
+    io.observe(target);
+  } else {
+    // Fallback: mount after a short delay
+    setTimeout(mountLiveIframe, 1200);
+  }
+})();
+
+/* -------- Public API to set the live URL -------- */
+function setLive(url) {
+  if (typeof url !== 'string' || !url.trim()) return;
+  EMBED_URL = url.trim();
+  // If the live section is already in view or observer has fired, mount now
+  mountLiveIframe();
+  const badge = document.getElementById('live-badge');
+  if (badge) badge.removeAttribute('hidden');
+}
+// Expose to window so you can call setLive('https://…') inline if needed
 window.setLive = setLive;
+
+/* -------- (Optional) Auto-init example -------- */
+// Example: uncomment and replace with your real embed URL when ready
+// setLive('https://your-embed.example');

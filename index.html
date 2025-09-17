@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VeilCore — Stimothy Pumps ($stimothy)</title>
+  <meta
+    name="description"
+    content="VeilCore is a glitch-native studio. Stimothy Pumps ($stimothy)—a grungy, black-and-white coin built in public. Live streams, drops, and on-chain chaos."
+  />
+  <meta property="og:title" content="VeilCore — Stimothy Pumps ($stimothy)" />
+  <meta
+    property="og:description"
+    content="VeilCore is a glitch-native studio. Stimothy Pumps ($stimothy)—a grungy, black-and-white coin built in public. Live streams, drops, and on-chain chaos."
+  />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://veilcore.us/" />
+  <meta property="og:image" content="https://veilcore.us/assets/social-card.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="VeilCore — Stimothy Pumps ($stimothy)" />
+  <meta
+    name="twitter:description"
+    content="VeilCore is a glitch-native studio. Stimothy Pumps ($stimothy)—a grungy, black-and-white coin built in public. Live streams, drops, and on-chain chaos."
+  />
+  <meta name="twitter:image" content="https://veilcore.us/assets/social-card.png" />
+  <link rel="icon" href="/assets/favicon.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;600&family=JetBrains+Mono:wght@500&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="script.js" defer></script>
+</head>
+<body class="dark">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <header class="site-header" role="banner">
+    <div class="wrap">
+      <div class="wordmark" aria-label="VeilCore wordmark placeholder">
+        <!-- TODO: Replace with assets/veilcore-wordmark.svg -->
+        <span>VeilCore</span>
+      </div>
+      <nav id="primary-nav" class="site-nav" aria-label="Primary" data-open="false">
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#live">Live</a></li>
+          <li><a href="#token">Token</a></li>
+          <li><a href="#links">Links</a></li>
+        </ul>
+      </nav>
+      <button
+        class="mobile-nav-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="primary-nav"
+        aria-label="Toggle navigation"
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="hero" class="wrap scanlines hero" aria-labelledby="hero-title">
+      <div class="hero__inner">
+        <div class="hero__left">
+          <h1 id="hero-title" class="glitch" data-text="Stimothy Pumps">Stimothy Pumps</h1>
+          <p class="hero__subline glitch" data-text="$stimothy">$stimothy</p>
+          <p class="hero__tagline">addicted to pump.fun — watch the chaos live</p>
+          <div class="hero__actions">
+            <a class="btn" href="#live">Watch Live</a>
+            <button class="btn-ghost" type="button" data-copy="$stimothy">Copy $stimothy</button>
+            <span class="pill-badge" id="live-badge" hidden>NOW LIVE</span>
+          </div>
+        </div>
+        <div class="hero__right">
+          <img src="stimothy.png" alt="Stimothy coin" loading="lazy" />
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section" aria-labelledby="about-title">
+      <div class="wrap section__wrap">
+        <div class="section__content">
+          <h2 id="about-title">What is VeilCore?</h2>
+          <p>
+            VeilCore is a glitch-native, creator-first studio. We design coins, streams, and moments that feel wired into the feed. Our mascot, Stimothy, is addicted to pump.fun—and we build around the spectacle.
+          </p>
+          <p>
+            This site is the hub: live streams, drops, and progress—built in public. No promises, no financial advice. Just raw output and culture.
+          </p>
+          <ul class="section__list">
+            <li>Live trading stream</li>
+            <li>Creator rewards focus</li>
+            <li>No commentary, no mercy</li>
+          </ul>
+        </div>
+        <figure class="section__visual">
+          <img src="stimothy.png" alt="Stimothy coin" loading="lazy" />
+        </figure>
+      </div>
+    </section>
+
+    <section id="live" class="section live" aria-labelledby="live-title">
+      <div class="wrap live__wrap">
+        <h2 id="live-title">Live on pump.fun</h2>
+        <div class="live__frame" id="live-embed" data-live-target>
+          <div class="live__placeholder" role="img" aria-label="Live stream placeholder">
+            <span class="live__play" aria-hidden="true"></span>
+          </div>
+        </div>
+        <p class="live__note">Stream appears here when live.</p>
+      </div>
+    </section>
+
+    <section id="token" class="section token" aria-labelledby="token-title">
+      <div class="wrap token__wrap">
+        <h2 id="token-title">$stimothy</h2>
+        <div class="ticker" aria-label="$stimothy ticker">
+          <div class="ticker__inner" aria-hidden="true">
+            $stimothy • addicted to pump.fun • stay unhinged • $stimothy • addicted to pump.fun • stay unhinged •
+          </div>
+        </div>
+        <ul class="token-cards" role="list">
+          <li class="token-card">
+            <h3>Contract</h3>
+            <p>Coming soon</p>
+          </li>
+          <li class="token-card">
+            <h3>Liquidity</h3>
+            <p>TBA</p>
+          </li>
+          <li class="token-card">
+            <h3>Creator rewards</h3>
+            <p>Stream-driven culture; we reward the spectacle. Details soon.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="links" class="section" aria-labelledby="links-title">
+      <div class="wrap">
+        <div class="section__header">
+          <p class="pill-badge" aria-hidden="true">Quick links</p>
+          <h2 id="links-title">Plug into the grid</h2>
+        </div>
+        <ul class="link-grid" role="list">
+          <li>
+            <a class="link-card" href="#" target="_blank" rel="noopener">
+              <span class="link-card__icon" aria-hidden="true">◆</span>
+              <div class="link-card__content">
+                <h3>Pump.fun</h3>
+                <p>Placeholder jump point for the Stimothy Pumps launch page.</p>
+              </div>
+              <span class="link-card__external" aria-hidden="true">↗</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="link-card"
+              href="https://x.com/veilcore"
+              target="_blank"
+              rel="noopener"
+            >
+              <span class="link-card__icon" aria-hidden="true">✶</span>
+              <div class="link-card__content">
+                <h3>X / Twitter</h3>
+                <p>Tap into the VeilCore signal for real-time Stimothy chaos.</p>
+              </div>
+              <span class="link-card__external" aria-hidden="true">↗</span>
+            </a>
+          </li>
+          <li>
+            <a class="link-card" href="#" target="_blank" rel="noopener">
+              <span class="link-card__icon" aria-hidden="true">◎</span>
+              <div class="link-card__content">
+                <h3>Telegram</h3>
+                <p>Placeholder for the Stimothy Pumps swarm chat—drop link soon.</p>
+              </div>
+              <span class="link-card__external" aria-hidden="true">↗</span>
+            </a>
+          </li>
+          <li>
+            <a class="link-card" href="https://github.com/veilcode/veilcode_landing" target="_blank" rel="noopener">
+              <span class="link-card__icon" aria-hidden="true">▣</span>
+              <div class="link-card__content">
+                <h3>GitHub</h3>
+                <p>Review the repo powering veilcore.us and ship fresh glitches.</p>
+              </div>
+              <span class="link-card__external" aria-hidden="true">↗</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="wrap footer__wrap">
+      <p class="footer__legal">
+        © VeilCore <span id="current-year"></span>
+        <span aria-hidden="true">•</span>
+        <span class="footer__domain">veilcore.us</span>
+      </p>
+      <nav aria-label="Legal">
+        <ul class="footer__nav">
+          <li><a href="#">Terms</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+
+  <div class="toast" role="status" aria-live="polite" hidden>$stimothy copied!</div>
+
+</body>
+</html>

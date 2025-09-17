@@ -34,6 +34,36 @@ const initSmoothScroll = () => {
   });
 };
 
+const initMobileNav = () => {
+  const toggle = document.querySelector('.mobile-nav-toggle');
+  const nav = document.getElementById('primary-nav');
+
+  if (!toggle || !nav) return;
+
+  const closeNav = () => {
+    nav.dataset.open = 'false';
+    toggle.setAttribute('aria-expanded', 'false');
+  };
+
+  toggle.addEventListener('click', () => {
+    const isOpen = nav.dataset.open === 'true';
+    nav.dataset.open = String(!isOpen);
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+  });
+
+  nav.addEventListener('click', (event) => {
+    if (event.target instanceof Element && event.target.closest('a')) {
+      closeNav();
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 720) {
+      closeNav();
+    }
+  });
+};
+
 const initCopyTicker = () => {
   const copyButtons = document.querySelectorAll('[data-copy]');
   const toast = document.querySelector('.toast');
@@ -76,5 +106,6 @@ const setYear = () => {
 window.addEventListener('DOMContentLoaded', () => {
   initSmoothScroll();
   initCopyTicker();
+  initMobileNav();
   setYear();
 });

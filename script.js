@@ -124,7 +124,7 @@ function mountLiveIframe() {
 })();
 
 /* -------- Public API to set the live URL -------- */
-function setLive(url) {
+function setLive(https://pump.fun/board) {
   if (typeof url !== 'string' || !url.trim()) return;
   EMBED_URL = url.trim();
   // If the live section is already in view or observer has fired, mount now

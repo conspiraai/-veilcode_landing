@@ -1,140 +1,171 @@
-/* ============================
-   VeilCore — Stimothy Pumps ($stimothy)
-   Client-side interactions
-   - Smooth scroll (reduced-motion aware)
-   - Copy-to-clipboard + toast
-   - Random micro-glitch pulses
-   - Lazy live embed with setLive(url)
-   ============================ */
+let EMBED_URL = '';
+const toastNode = document.getElementById('toast');
+const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+let glitchTimer = null;
 
-/* -------- Smooth scroll (respect reduced motion) -------- */
-(function () {
-  const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (prefersReduced) return;
-  document.addEventListener('click', (e) => {
-    const a = e.target.closest('a[href^="#"]');
-    if (!a) return;
-    const id = a.getAttribute('href').slice(1);
-    if (!id) return;
-    const el = document.getElementById(id);
-    if (!el) return;
-    e.preventDefault();
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    history.replaceState(null, '', `#${id}`);
+function showToast(message) {
+  if (!toastNode) return;
+  toastNode.textContent = message;
+  toastNode.hidden = false;
+  requestAnimationFrame(() => {
+    toastNode.classList.add('on');
   });
-})();
-
-/* -------- Toast helper -------- */
-function showToast(msg) {
-  let t = document.querySelector('.toast');
-  if (!t) {
-    t = document.createElement('div');
-    t.className = 'toast';
-    t.setAttribute('role', 'status');
-    t.setAttribute('aria-live', 'polite');
-    document.body.appendChild(t);
-  }
-  t.textContent = msg;
-  t.classList.add('on');
-  window.clearTimeout(showToast._timer);
-  showToast._timer = window.setTimeout(() => t.classList.remove('on'), 1400);
+  setTimeout(() => {
+    toastNode.classList.remove('on');
+    setTimeout(() => {
+      toastNode.hidden = true;
+      toastNode.textContent = '';
+    }, 200);
+  }, 1400);
 }
 
-/* -------- Copy $stimothy button(s) -------- */
-(function () {
-  document.addEventListener('click', async (e) => {
-    const btn = e.target.closest('[data-copy="$stimothy"]');
-    if (!btn) return;
-    try {
-      await navigator.clipboard.writeText('$stimothy');
+function handleCopyClick(event) {
+  const trigger = event.currentTarget;
+  const value = trigger?.getAttribute('data-copy');
+  if (value !== '$stimothy') return;
+
+  const copyText = '$stimothy';
+
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+    navigator.clipboard.writeText(copyText).then(() => {
       showToast('Copied: $stimothy');
-    } catch {
-      // Fallback: create temp input
-      const tmp = document.createElement('input');
-      tmp.value = '$stimothy';
-      document.body.appendChild(tmp);
-      tmp.select();
-      try { document.execCommand('copy'); showToast('Copied: $stimothy'); }
-      catch { showToast('Copy failed'); }
-      tmp.remove();
-    }
+    }).catch(() => fallbackCopy(copyText));
+  } else {
+    fallbackCopy(copyText);
+  }
+}
+
+function fallbackCopy(text) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.setAttribute('readonly', '');
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    showToast('Copied: $stimothy');
+  } catch (err) {
+    console.error('Copy failed', err);
+  }
+  document.body.removeChild(textarea);
+}
+
+function enableSmoothScroll() {
+  if (motionQuery.matches) {
+    return;
+  }
+  const anchors = document.querySelectorAll('a[href^="#"]');
+  anchors.forEach((anchor) => {
+    anchor.addEventListener('click', (event) => {
+      const targetId = anchor.getAttribute('href');
+      if (!targetId || targetId === '#') return;
+      const target = document.querySelector(targetId);
+      if (!target) return;
+      event.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth' });
+    });
   });
-})();
+}
 
-/* -------- Random micro-glitch pulses (reduced-motion aware) -------- */
-(function () {
-  const rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (rm) return;
-  const GLITCH_CLASS = 'animate';
-  function pulseOnce() {
-    const els = document.querySelectorAll('.glitch');
-    if (!els.length) return;
-    const el = els[Math.floor(Math.random() * els.length)];
-    el.classList.add(GLITCH_CLASS);
-    setTimeout(() => el.classList.remove(GLITCH_CLASS), 900);
+function scheduleGlitchPulse() {
+  clearTimeout(glitchTimer);
+  if (motionQuery.matches) {
+    return;
   }
-  function loop() {
-    const delay = 8000 + Math.random() * 4000; // 8–12s
-    setTimeout(() => { pulseOnce(); loop(); }, delay);
+  const glitchNodes = document.querySelectorAll('.glitch');
+  if (!glitchNodes.length) {
+    return;
   }
-  // Start after initial paint
-  window.addEventListener('load', () => setTimeout(loop, 1200));
-})();
+  const delay = 8000 + Math.random() * 6000;
+  glitchTimer = window.setTimeout(() => {
+    const randomIndex = Math.floor(Math.random() * glitchNodes.length);
+    const node = glitchNodes[randomIndex];
+    if (node) {
+      node.classList.add('animate');
+      setTimeout(() => {
+        node.classList.remove('animate');
+      }, 400);
+    }
+    scheduleGlitchPulse();
+  }, delay);
+}
 
-/* -------- Live embed (lazy) -------- */
-let EMBED_URL = ''; // set via setLive(url)
 function mountLiveIframe() {
   if (!EMBED_URL) return;
   const box = document.getElementById('live-embed');
-  if (!box) return;
-  // Avoid remounting
-  if (box.dataset.mounted === '1') return;
-
-  box.innerHTML = `<iframe
-    src="${EMBED_URL}"
-    loading="lazy"
-    allow="autoplay; fullscreen; picture-in-picture"
-    referrerpolicy="no-referrer"
-    frameborder="0"
-    style="width:100%;aspect-ratio:16/9;border:0;border-radius:12px;box-shadow:0 0 0 1px #ffffff22 inset;"
-  ></iframe>`;
-
+  if (!box || box.dataset.mounted === '1') return;
+  box.innerHTML = '<iframe title="Live stream" src="' + EMBED_URL + '" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" referrerpolicy="no-referrer" frameborder="0" style="width:100%;aspect-ratio:16/9;border:0;border-radius:12px;box-shadow:0 0 0 1px #ffffff22 inset;"></iframe>';
   box.dataset.mounted = '1';
-  const badge = document.getElementById('live-badge');
-  if (badge) badge.removeAttribute('hidden');
 }
 
-(function () {
-  const target = document.getElementById('live-embed');
-  if (!target) return;
+function observeLiveEmbed() {
+  const box = document.getElementById('live-embed');
+  if (!box) return;
+
   if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
           mountLiveIframe();
-          io.disconnect();
+          observer.disconnect();
         }
       });
-    }, { rootMargin: '200px' });
-    io.observe(target);
+    });
+    observer.observe(box);
   } else {
-    // Fallback: mount after a short delay
-    setTimeout(mountLiveIframe, 1200);
+    window.setTimeout(mountLiveIframe, 2000);
   }
-})();
+}
 
-/* -------- Public API to set the live URL -------- */
-function setLive(https://pump.fun/board) {
-  if (typeof url !== 'string' || !url.trim()) return;
+function initCopyButtons() {
+  const triggers = document.querySelectorAll('[data-copy="$stimothy"]');
+  triggers.forEach((trigger) => {
+    trigger.addEventListener('click', handleCopyClick);
+  });
+}
+
+function updateYear() {
+  const yearNode = document.getElementById('year');
+  if (yearNode) {
+    yearNode.textContent = new Date().getFullYear();
+  }
+}
+
+function init() {
+  enableSmoothScroll();
+  initCopyButtons();
+  observeLiveEmbed();
+  updateYear();
+  scheduleGlitchPulse();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+
+function handleMotionChange() {
+  if (motionQuery.matches) {
+    clearTimeout(glitchTimer);
+  } else {
+    scheduleGlitchPulse();
+  }
+}
+
+if (typeof motionQuery.addEventListener === 'function') {
+  motionQuery.addEventListener('change', handleMotionChange);
+} else if (typeof motionQuery.addListener === 'function') {
+  motionQuery.addListener(handleMotionChange);
+}
+
+function setLive(url) {
+  if (!url || typeof url !== 'string') return;
   EMBED_URL = url.trim();
-  // If the live section is already in view or observer has fired, mount now
+  if (!EMBED_URL) return;
   mountLiveIframe();
   const badge = document.getElementById('live-badge');
-  if (badge) badge.removeAttribute('hidden');
+  if (badge) {
+    badge.hidden = false;
+  }
 }
-// Expose to window so you can call setLive('https://…') inline if needed
-window.setLive = setLive;
 
-/* -------- (Optional) Auto-init example -------- */
-// Example: uncomment and replace with your real embed URL when ready
-// setLive('https://your-embed.example');
+window.setLive = setLive;

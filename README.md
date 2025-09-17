@@ -17,7 +17,7 @@ Glitchcore single-page site for **VeilCore** promoting the **Stimothy Pumps ($st
 - **VeilCore** is the creator-first collective behind the site and all visual branding.
 - **Stimothy Pumps ($stimothy)** is the featured token; copy throughout the page references the ticker and coin lore.
 - The hero, live badge, and clipboard actions all use `$stimothy` by default—update the copy if the ticker changes.
-- VeilCore.us is the canonical domain; all deployment steps and meta tags reference the VeilCore home base.
+- **VeilCore.us is the canonical domain.** All deployment steps and meta tags reference the VeilCore home base.
 
 ## Replacing visuals
 

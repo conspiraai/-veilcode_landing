@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Square Surge ($SQRG) | Veilcode</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="scanlines"></div>
+  <header class="site-header">
+    <div class="wordmark" aria-label="Veilcode wordmark placeholder"><!-- TODO: Replace with Veilcode SVG wordmark --><span>Veilcode</span></div>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="#hero">Home</a>
+      <a href="#about">About</a>
+      <a href="#live">Live</a>
+      <a href="#links">Links</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="hero-content">
+        <p class="eyebrow">Neon markets / Glitched realities</p>
+        <h1 id="hero-title" class="glitch" data-glitch="Square Surge $SQRG">Square Surge <span>$SQRG</span></h1>
+        <p class="hero-copy">Times Square energy meets relentless on-chain acceleration. Square Surge ($SQRG) is your pulse in the neon canyon.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" data-scroll="#live">Watch Live</button>
+          <a class="btn btn-ghost" href="https://x.com/veilcode" target="_blank" rel="noreferrer">Follow on X</a>
+        </div>
+        <div class="ticker-copy">
+          <span class="ticker-label">Ticker:</span>
+          <span class="ticker-value">$SQRG</span>
+          <button class="copy-btn" type="button" aria-label="Copy ticker" data-copy="$SQRG">Copy</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="about" aria-labelledby="about-title">
+      <div class="about-text">
+        <h2 id="about-title">What is Square Surge?</h2>
+        <p>
+          Square Surge is the hyper-glitched pulse of Veilcode's Times Square takeover. We embrace the collision of digital art and on-chain liquidity, letting the crowd fuel the current while neon spectra slice through the dark.
+        </p>
+        <p>
+          Every block is a billboard, every trade a burst of color. Join the broadcast, ride the current, and amplify the signal.
+        </p>
+      </div>
+      <div class="about-visual">
+        <img src="stimothy.png" alt="Square Surge coin placeholder" loading="lazy" />
+      </div>
+    </section>
+
+    <section id="live" class="live" aria-labelledby="live-title">
+      <div class="live-inner">
+        <h2 id="live-title">Live Broadcast</h2>
+        <div class="live-card">
+          <div class="play-icon" aria-hidden="true"></div>
+          <p>Stream appears here when live.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="links" class="links" aria-labelledby="links-title">
+      <h2 id="links-title">Links &amp; Signals</h2>
+      <div class="link-grid">
+        <a class="link-card" href="https://pump.fun" target="_blank" rel="noreferrer">
+          <h3>Pump.fun</h3>
+          <p>Track the surge and ignite liquidity where the neon hums.</p>
+        </a>
+        <a class="link-card" href="https://t.me" target="_blank" rel="noreferrer">
+          <h3>Telegram</h3>
+          <p>Drop into the command channel and sync with the swarm.</p>
+        </a>
+        <a class="link-card" href="https://github.com" target="_blank" rel="noreferrer">
+          <h3>GitHub</h3>
+          <p>Inspect the code beams powering the Veilcode transmission.</p>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Veilcode &copy; <span id="current-year"></span>. All glitches reserved.</p>
+    <nav aria-label="Footer">
+      <a href="#about">About</a>
+      <a href="#live">Live</a>
+      <a href="#links">Links</a>
+    </nav>
+  </footer>
+
+  <div class="toast" role="status" aria-live="polite" hidden>Ticker copied!</div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -233,7 +233,7 @@ const setYear = () => {
   }
 };
 
-const setLive = (url) => {
+export function setLive(url) {
   EMBED_URL = typeof url === 'string' ? url : '';
   const badge = document.getElementById('live-badge');
   if (badge) {
@@ -243,7 +243,7 @@ const setLive = (url) => {
   if (liveSectionPrimed) {
     initLive();
   }
-};
+}
 
 const handleMotionPreferenceChange = (event) => {
   if (event.matches) {
